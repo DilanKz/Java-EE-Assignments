@@ -167,12 +167,12 @@ public class CustomerServlet extends HttpServlet {
         } catch (SQLException e) {
 
             resp.setStatus(400);
-            addJSONObject(e.getMessage(), "error");
+            resp.getWriter().print(addJSONObject(e.getMessage(), "error"));
 
         } catch (ClassNotFoundException e) {
 
             resp.setStatus(500);
-            addJSONObject(e.getMessage(), "error");
+            resp.getWriter().print(addJSONObject(e.getMessage(), "error"));
 
         }
 
