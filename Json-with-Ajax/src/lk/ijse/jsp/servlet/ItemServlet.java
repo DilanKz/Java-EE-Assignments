@@ -156,7 +156,7 @@ public class ItemServlet extends HttpServlet {
             pstm3.setObject(2, qty);
             pstm3.setObject(3, price);
             pstm3.setObject(4, code);
-            
+
             if (pstm3.executeUpdate() > 0) {
                 resp.getWriter().print(addJSONObject("Customer Saved !", "ok"));
             }

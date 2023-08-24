@@ -31,6 +31,11 @@ public class CustomerServlet extends HttpServlet {
             String option = req.getParameter("option");
 
             resp.addHeader("Content-type", "application/json");
+            resp.addHeader("Access-Control-Allow-Origin", "*");
+            resp.addHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT");
+            resp.addHeader("Access-Control-Allow-Credentials", "true");
+            resp.addHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+
             JsonArrayBuilder allCustomers = Json.createArrayBuilder();
 
             while (rst.next()) {
@@ -60,6 +65,8 @@ public class CustomerServlet extends HttpServlet {
 
         }
 
+        System.out.println("Here");
+
 
     }
 
@@ -69,7 +76,12 @@ public class CustomerServlet extends HttpServlet {
         String cusName = req.getParameter("cusName");
         String cusAddress = req.getParameter("cusAddress");
         String cusSalary = req.getParameter("cusSalary");
+
         resp.addHeader("Content-type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT");
+        resp.addHeader("Access-Control-Allow-Credentials", "true");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
 
         try {
 
@@ -91,21 +103,45 @@ public class CustomerServlet extends HttpServlet {
             }
 
         } catch (ClassNotFoundException e) {
-
+            //throw new RuntimeException(e);
             resp.setStatus(500);
             resp.getWriter().print(addJSONObject(e.getMessage(), "error"));
 
         } catch (SQLException e) {
-
+            //throw new RuntimeException(e);
             resp.setStatus(400);
             resp.getWriter().print(addJSONObject(e.getMessage(), "error"));
 
         }
+
+        /*JsonReader reader = Json.createReader(req.getReader());
+        JsonArray jsonValues = reader.readArray();
+        for (JsonValue jsonValue : jsonValues) {
+            String code=" ";
+            String id = jsonValue.asJsonObject().getString("oid");
+            String name = jsonValue.asJsonObject().getString("date");
+            JsonArray orderDetails = jsonValue.asJsonObject().getJsonArray("orderDetails");
+
+            for (JsonValue ods:orderDetails){
+                code = ods.asJsonObject().getString("code");
+            }
+
+            System.out.println(id+" "+name+" "+code);
+        }*/
+
+
+
+
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.addHeader("Content-type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT,OPTION");
+        /*resp.addHeader("Access-Control-Allow-Credentials", "true");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");*/
+
         JsonReader reader = Json.createReader(req.getReader());
         JsonObject customerOB = reader.readObject();
 
@@ -154,6 +190,11 @@ public class CustomerServlet extends HttpServlet {
         String cusID = req.getParameter("cusID");
         System.out.println(cusID);
         resp.addHeader("Content-type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT");
+        resp.addHeader("Access-Control-Allow-Credentials", "true");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/webpos?allowPublicKeyRetrieval=true&useSSL=false", "root", "1234");
@@ -189,5 +230,14 @@ public class CustomerServlet extends HttpServlet {
         status.add(objectBuilder.build());
 
         return status;
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.addHeader("Content-type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT");
+        resp.addHeader("Access-Control-Allow-Credentials", "true");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
     }
 }
